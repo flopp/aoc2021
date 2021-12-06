@@ -25,10 +25,10 @@ func (b *board) value(row int, col int) int {
 }
 
 func (b *board) win(numbers map[int]bool) bool {
-	for i := 0; i < 5; i += 1 {
+	for i := 0; i < 5; i++ {
 		row := true
 		col := true
-		for j := 0; j < 5; j += 1 {
+		for j := 0; j < 5; j++ {
 			if _, exists := numbers[b.value(i, j)]; !exists {
 				row = false
 			}
@@ -68,55 +68,55 @@ func main() {
 			for _, v := range strings.Split(line, ",") {
 				numbers = append(numbers, helpers.MustParseInt(v))
 			}
-			state += 1
+			state++
 		case 1:
 			if len(line) != 0 {
 				panic(fmt.Errorf("bad line (expected empty line): <%s>", line))
 			}
-			state += 1
+			state++
 		case 2:
 			current_board = createBoard()
 			match := re.FindStringSubmatch(line)
 			if match == nil {
 				panic(fmt.Errorf("bad line: <%s>", line))
 			}
-			for i := 0; i < 5; i += 1 {
+			for i := 0; i < 5; i++ {
 				current_board.setValue(state-2, i, helpers.MustParseInt(match[1+i]))
 			}
-			state += 1
+			state++
 		case 3:
 			match := re.FindStringSubmatch(line)
 			if match == nil {
 				panic(fmt.Errorf("bad line: <%s>", line))
 			}
-			for i := 0; i < 5; i += 1 {
+			for i := 0; i < 5; i++ {
 				current_board.setValue(state-2, i, helpers.MustParseInt(match[i+1]))
 			}
-			state += 1
+			state++
 		case 4:
 			match := re.FindStringSubmatch(line)
 			if match == nil {
 				panic(fmt.Errorf("bad line: <%s>", line))
 			}
-			for i := 0; i < 5; i += 1 {
+			for i := 0; i < 5; i++ {
 				current_board.setValue(state-2, i, helpers.MustParseInt(match[i+1]))
 			}
-			state += 1
+			state++
 		case 5:
 			match := re.FindStringSubmatch(line)
 			if match == nil {
 				panic(fmt.Errorf("bad line: <%s>", line))
 			}
-			for i := 0; i < 5; i += 1 {
+			for i := 0; i < 5; i++ {
 				current_board.setValue(state-2, i, helpers.MustParseInt(match[i+1]))
 			}
-			state += 1
+			state++
 		case 6:
 			match := re.FindStringSubmatch(line)
 			if match == nil {
 				panic(fmt.Errorf("bad line: <%s>", line))
 			}
-			for i := 0; i < 5; i += 1 {
+			for i := 0; i < 5; i++ {
 				current_board.setValue(state-2, i, helpers.MustParseInt(match[i+1]))
 			}
 			boards = append(boards, current_board)

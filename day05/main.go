@@ -64,7 +64,7 @@ func countCrossings(board *map[xy]int) int {
 	sum := 0
 	for _, count := range *board {
 		if count > 1 {
-			sum += 1
+			sum++
 		}
 	}
 	return sum
