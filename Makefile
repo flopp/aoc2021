@@ -4,6 +4,7 @@ format:
 	@go fmt day02/*.go
 	@go fmt day03/*.go
 	@go fmt day04/*.go
+	@go fmt day05/*.go
 
 .PHONY: 01
 01:
@@ -40,3 +41,12 @@ format:
 	@echo "expected: 1924"
 	@go run day04/main.go part2 < day04/test.txt
 	@go run day04/main.go part2 < day04/puzzle.txt
+
+.PHONY: 05
+05:
+	@echo "expected: 5"
+	@go run day05/main.go part1 < day05/test.txt
+	@go run day05/main.go part1 < day05/puzzle.txt
+	@echo "expected: 12"
+	@go run day05/main.go part2 < day05/test.txt
+	@go run day05/main.go part2 < day05/puzzle.txt
