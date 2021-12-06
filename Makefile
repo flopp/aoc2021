@@ -1,52 +1,61 @@
+define run1
+	@go run day$@/main.go part1 < day$@/test.txt
+	@go run day$@/main.go part1 < day$@/puzzle.txt
+endef
+
+define run2
+	@go run day$@/main.go part2 < day$@/test.txt
+	@go run day$@/main.go part2 < day$@/puzzle.txt
+endef
+
 .PHONY: format
 format:
-	@go fmt day01/*.go
-	@go fmt day02/*.go
-	@go fmt day03/*.go
-	@go fmt day04/*.go
-	@go fmt day05/*.go
+	go fmt helpers/*.go
+	go fmt day01/main.go
+	go fmt day02/main.go
+	go fmt day03/main.go
+	go fmt day04/main.go
+	go fmt day05/main.go
+	go fmt day06/main.go
 
 .PHONY: 01
 01:
 	@echo "expected: 7"
-	@go run day01/main.go 1 < day01/test.txt
-	@go run day01/main.go 1 < day01/puzzle.txt
+	$(run1)
 	@echo "expected: 5"
-	@go run day01/main.go 3 < day01/test.txt
-	@go run day01/main.go 3 < day01/puzzle.txt
+	$(run2)
 
 .PHONY: 02
 02:
 	@echo "expected: 150"
-	@go run day02/main.go part1 < day02/test.txt
-	@go run day02/main.go part1 < day02/puzzle.txt
+	$(run1)
 	@echo "expected: 900"
-	@go run day02/main.go part2 < day02/test.txt
-	@go run day02/main.go part2 < day02/puzzle.txt
+	$(run2)
 
 .PHONY: 03
 03:
 	@echo "expected: 198"
-	@go run day03/main.go part1 < day03/test.txt
-	@go run day03/main.go part1 < day03/puzzle.txt
+	$(run1)
 	@echo "expected: 230"
-	@go run day03/main.go part2 < day03/test.txt
-	@go run day03/main.go part2 < day03/puzzle.txt
+	$(run2)
 
 .PHONY: 04
 04:
 	@echo "expected: 4512"
-	@go run day04/main.go part1 < day04/test.txt
-	@go run day04/main.go part1 < day04/puzzle.txt
+	$(run1)
 	@echo "expected: 1924"
-	@go run day04/main.go part2 < day04/test.txt
-	@go run day04/main.go part2 < day04/puzzle.txt
+	$(run2)
 
 .PHONY: 05
 05:
 	@echo "expected: 5"
-	@go run day05/main.go part1 < day05/test.txt
-	@go run day05/main.go part1 < day05/puzzle.txt
+	$(run1)
 	@echo "expected: 12"
-	@go run day05/main.go part2 < day05/test.txt
-	@go run day05/main.go part2 < day05/puzzle.txt
+	$(run2)
+
+.PHONY: 06
+06:
+	@echo "expected: 5934"
+	$(run1)
+	@echo "expected: 26984457539"
+	$(run2)

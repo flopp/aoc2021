@@ -3,25 +3,17 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/flopp/aoc2021/helpers"
 	"os"
 	"regexp"
-	"strconv"
 )
 
 func main() {
-	part1 := true
-	switch {
-	case os.Args[1] == "part1":
-		part1 = true
-	case os.Args[1] == "part2":
-		part1 = false
-	default:
-		panic(fmt.Errorf("bad part option: <%s>", os.Args[1]))
-	}
+	part1 := helpers.Part1()
 
-	aim := int64(0)
-	horizontal_position := int64(0)
-	depth := int64(0)
+	aim := 0
+	horizontal_position := 0
+	depth := 0
 	re := regexp.MustCompile(`^(forward|down|up) (\d+)$`)
 
 	scanner := bufio.NewScanner(os.Stdin)
@@ -32,10 +24,7 @@ func main() {
 			panic(fmt.Errorf("bad line: <%s>", line))
 		}
 
-		value, err := strconv.ParseInt(match[2], 10, 64)
-		if err != nil {
-			panic(err)
-		}
+		value := helpers.MustParseInt(match[2])
 
 		switch {
 		case match[1] == "forward":

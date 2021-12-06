@@ -3,9 +3,9 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/flopp/aoc2021/helpers"
 	"os"
 	"regexp"
-	"strconv"
 	"strings"
 )
 
@@ -54,16 +54,6 @@ func (b *board) score(numbers map[int]bool) int {
 }
 
 func main() {
-	part1 := true
-	switch {
-	case os.Args[1] == "part1":
-		part1 = true
-	case os.Args[1] == "part2":
-		part1 = false
-	default:
-		panic(fmt.Errorf("bad part option: <%s>", os.Args[1]))
-	}
-
 	re := regexp.MustCompile(`^\s*(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s*$`)
 	boards := make([]*board, 0)
 	numbers := make([]int, 0)
@@ -76,11 +66,7 @@ func main() {
 		switch state {
 		case 0:
 			for _, v := range strings.Split(line, ",") {
-				number, err := strconv.ParseInt(v, 10, 32)
-				if err != nil {
-					panic(err)
-				}
-				numbers = append(numbers, int(number))
+				numbers = append(numbers, helpers.MustParseInt(v))
 			}
 			state += 1
 		case 1:
@@ -95,11 +81,7 @@ func main() {
 				panic(fmt.Errorf("bad line: <%s>", line))
 			}
 			for i := 0; i < 5; i += 1 {
-				number, err := strconv.ParseInt(match[1+i], 10, 32)
-				if err != nil {
-					panic(err)
-				}
-				current_board.setValue(state-2, i, int(number))
+				current_board.setValue(state-2, i, helpers.MustParseInt(match[1+i]))
 			}
 			state += 1
 		case 3:
@@ -108,11 +90,7 @@ func main() {
 				panic(fmt.Errorf("bad line: <%s>", line))
 			}
 			for i := 0; i < 5; i += 1 {
-				number, err := strconv.ParseInt(match[1+i], 10, 32)
-				if err != nil {
-					panic(err)
-				}
-				current_board.setValue(state-2, i, int(number))
+				current_board.setValue(state-2, i, helpers.MustParseInt(match[i+1]))
 			}
 			state += 1
 		case 4:
@@ -121,11 +99,7 @@ func main() {
 				panic(fmt.Errorf("bad line: <%s>", line))
 			}
 			for i := 0; i < 5; i += 1 {
-				number, err := strconv.ParseInt(match[1+i], 10, 32)
-				if err != nil {
-					panic(err)
-				}
-				current_board.setValue(state-2, i, int(number))
+				current_board.setValue(state-2, i, helpers.MustParseInt(match[i+1]))
 			}
 			state += 1
 		case 5:
@@ -134,11 +108,7 @@ func main() {
 				panic(fmt.Errorf("bad line: <%s>", line))
 			}
 			for i := 0; i < 5; i += 1 {
-				number, err := strconv.ParseInt(match[1+i], 10, 32)
-				if err != nil {
-					panic(err)
-				}
-				current_board.setValue(state-2, i, int(number))
+				current_board.setValue(state-2, i, helpers.MustParseInt(match[i+1]))
 			}
 			state += 1
 		case 6:
@@ -147,11 +117,7 @@ func main() {
 				panic(fmt.Errorf("bad line: <%s>", line))
 			}
 			for i := 0; i < 5; i += 1 {
-				number, err := strconv.ParseInt(match[1+i], 10, 32)
-				if err != nil {
-					panic(err)
-				}
-				current_board.setValue(state-2, i, int(number))
+				current_board.setValue(state-2, i, helpers.MustParseInt(match[i+1]))
 			}
 			boards = append(boards, current_board)
 			state = 1
@@ -162,7 +128,7 @@ func main() {
 	}
 
 	numbers_set := make(map[int]bool)
-	if part1 {
+	if helpers.Part1() {
 		for _, number := range numbers {
 			numbers_set[number] = true
 			for _, b := range boards {

@@ -3,42 +3,40 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/flopp/aoc2021/helpers"
 	"os"
-	"strconv"
 )
 
 func main() {
-	window_size, err := strconv.ParseInt(os.Args[1], 10, 64)
-	if err != nil {
-		panic(err)
+	var window_size int
+	if helpers.Part1() {
+		window_size = 1
+	} else {
+		window_size = 3
 	}
 
-	depths := make([]int64, 0)
+	depths := make([]int, 0)
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
 		line := scanner.Text()
-		depth, err := strconv.ParseInt(line, 10, 64)
-		if err != nil {
-			panic(err)
-		}
-		depths = append(depths, depth)
+		depths = append(depths, helpers.MustParseInt(line))
 	}
 	if err := scanner.Err(); err != nil {
 		panic(err)
 	}
 
 	deeper := 0
-	last_window := int64(0)
+	last_window := 0
 	for index, depth := range depths {
-		if int64(index) < window_size {
+		if index < window_size {
 			last_window += depth
 		} else {
-			window := int64(0)
-			for _, d := range depths[int64(index)+1-window_size : int64(index)+1] {
+			window := 0
+			for _, d := range depths[index+1-window_size : index+1] {
 				window += d
 			}
 			if window > last_window {
-				deeper += 1
+				deeper++
 			}
 			last_window = window
 		}

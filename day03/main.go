@@ -3,20 +3,11 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/flopp/aoc2021/helpers"
 	"os"
 )
 
 func main() {
-	part1 := true
-	switch {
-	case os.Args[1] == "part1":
-		part1 = true
-	case os.Args[1] == "part2":
-		part1 = false
-	default:
-		panic(fmt.Errorf("bad part option: <%s>", os.Args[1]))
-	}
-
 	diagnostic_report := make([][]bool, 0)
 	line_length := -1
 	scanner := bufio.NewScanner(os.Stdin)
@@ -48,13 +39,13 @@ func main() {
 		panic(err)
 	}
 
-	if part1 {
+	if helpers.Part1() {
 		count1 := make([]int, len(diagnostic_report[0]))
 
 		for _, report_line := range diagnostic_report {
 			for index, bit := range report_line {
 				if bit {
-					count1[index] += 1
+					count1[index]++
 				}
 			}
 		}
@@ -82,14 +73,14 @@ func main() {
 	} else {
 		// oxygen generator rating
 		filtered_diagnostic_report := append([][]bool{}, diagnostic_report...)
-		for index := 0; index < line_length; index += 1 {
+		for index := 0; index < line_length; index++ {
 			if len(filtered_diagnostic_report) == 1 {
 				break
 			}
 			count1 := 0
 			for _, report_line := range filtered_diagnostic_report {
 				if report_line[index] {
-					count1 += 1
+					count1++
 				}
 			}
 			filtered2 := make([][]bool, 0, len(filtered_diagnostic_report))
@@ -115,20 +106,20 @@ func main() {
 		for _, bit := range filtered_diagnostic_report[0] {
 			oxygen_generator_rating = (oxygen_generator_rating << 1)
 			if bit {
-				oxygen_generator_rating += 1
+				oxygen_generator_rating++
 			}
 		}
 
 		// CO2 scrubber rating
 		filtered_diagnostic_report = append([][]bool{}, diagnostic_report...)
-		for index := 0; index < line_length; index += 1 {
+		for index := 0; index < line_length; index++ {
 			if len(filtered_diagnostic_report) == 1 {
 				break
 			}
 			count1 := 0
 			for _, report_line := range filtered_diagnostic_report {
 				if report_line[index] {
-					count1 += 1
+					count1++
 				}
 			}
 			filtered2 := make([][]bool, 0, len(filtered_diagnostic_report))
@@ -156,7 +147,7 @@ func main() {
 		for _, bit := range filtered_diagnostic_report[0] {
 			co2_scrubber_rating = (co2_scrubber_rating << 1)
 			if bit {
-				co2_scrubber_rating += 1
+				co2_scrubber_rating++
 			}
 		}
 

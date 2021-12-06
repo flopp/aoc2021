@@ -3,18 +3,10 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/flopp/aoc2021/helpers"
 	"os"
 	"regexp"
-	"strconv"
 )
-
-func mustParseInt(s string) int {
-	x, err := strconv.ParseInt(s, 10, 32)
-	if err != nil {
-		panic(err)
-	}
-	return int(x)
-}
 
 type xy struct {
 	x int
@@ -79,15 +71,7 @@ func countCrossings(board *map[xy]int) int {
 }
 
 func main() {
-	part1 := true
-	switch {
-	case os.Args[1] == "part1":
-		part1 = true
-	case os.Args[1] == "part2":
-		part1 = false
-	default:
-		panic(fmt.Errorf("bad part option: <%s>", os.Args[1]))
-	}
+	part1 := helpers.Part1()
 
 	board := make(map[xy]int)
 
@@ -96,10 +80,10 @@ func main() {
 	for scanner.Scan() {
 		line := scanner.Text()
 		match := re.FindStringSubmatch(line)
-		x1 := mustParseInt(match[1])
-		y1 := mustParseInt(match[2])
-		x2 := mustParseInt(match[3])
-		y2 := mustParseInt(match[4])
+		x1 := helpers.MustParseInt(match[1])
+		y1 := helpers.MustParseInt(match[2])
+		x2 := helpers.MustParseInt(match[3])
+		y2 := helpers.MustParseInt(match[4])
 
 		if part1 {
 			if x1 == x2 || y1 == y2 {
