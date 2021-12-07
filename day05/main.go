@@ -1,11 +1,10 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"github.com/flopp/aoc2021/helpers"
-	"os"
 	"regexp"
+
+	"github.com/flopp/aoc2021/helpers"
 )
 
 type xy struct {
@@ -76,9 +75,7 @@ func main() {
 	board := make(map[xy]int)
 
 	re := regexp.MustCompile(`^(\d+),(\d+)\s*->\s*(\d+),(\d+)$`)
-	scanner := bufio.NewScanner(os.Stdin)
-	for scanner.Scan() {
-		line := scanner.Text()
+	for _, line := range helpers.ReadStdin() {
 		match := re.FindStringSubmatch(line)
 		x1 := helpers.MustParseInt(match[1])
 		y1 := helpers.MustParseInt(match[2])
@@ -92,9 +89,6 @@ func main() {
 		} else {
 			insertLine(&board, x1, y1, x2, y2)
 		}
-	}
-	if err := scanner.Err(); err != nil {
-		panic(err)
 	}
 
 	fmt.Printf("%d\n", countCrossings(&board))

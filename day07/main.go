@@ -1,9 +1,7 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/flopp/aoc2021/helpers"
@@ -13,15 +11,10 @@ func main() {
 	part1 := helpers.Part1()
 
 	crabs := make([]int, 0)
-	scanner := bufio.NewScanner(os.Stdin)
-	for scanner.Scan() {
-		line := scanner.Text()
+	for _, line := range helpers.ReadStdin() {
 		for _, crab_s := range strings.Split(line, ",") {
 			crabs = append(crabs, helpers.MustParseInt(crab_s))
 		}
-	}
-	if err := scanner.Err(); err != nil {
-		panic(err)
 	}
 
 	min := crabs[0]

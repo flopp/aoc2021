@@ -1,10 +1,9 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
+
 	"github.com/flopp/aoc2021/helpers"
-	"os"
 )
 
 func main() {
@@ -16,13 +15,8 @@ func main() {
 	}
 
 	depths := make([]int, 0)
-	scanner := bufio.NewScanner(os.Stdin)
-	for scanner.Scan() {
-		line := scanner.Text()
+	for _, line := range helpers.ReadStdin() {
 		depths = append(depths, helpers.MustParseInt(line))
-	}
-	if err := scanner.Err(); err != nil {
-		panic(err)
 	}
 
 	deeper := 0

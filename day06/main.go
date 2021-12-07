@@ -1,11 +1,10 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"github.com/flopp/aoc2021/helpers"
-	"os"
 	"strings"
+
+	"github.com/flopp/aoc2021/helpers"
 )
 
 func insert(timers *map[int]int, timer int, count int) {
@@ -26,16 +25,11 @@ func main() {
 	}
 
 	timers := make(map[int]int)
-	scanner := bufio.NewScanner(os.Stdin)
-	for scanner.Scan() {
-		line := scanner.Text()
+	for _, line := range helpers.ReadStdin() {
 		for _, timer_s := range strings.Split(line, ",") {
 			timer := helpers.MustParseInt(timer_s)
 			insert(&timers, timer, 1)
 		}
-	}
-	if err := scanner.Err(); err != nil {
-		panic(err)
 	}
 
 	for day := 0; day < days; day++ {

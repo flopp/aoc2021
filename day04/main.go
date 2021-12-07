@@ -1,12 +1,11 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"github.com/flopp/aoc2021/helpers"
-	"os"
 	"regexp"
 	"strings"
+
+	"github.com/flopp/aoc2021/helpers"
 )
 
 type board []int
@@ -57,12 +56,9 @@ func main() {
 	re := regexp.MustCompile(`^\s*(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s*$`)
 	boards := make([]*board, 0)
 	numbers := make([]int, 0)
-	scanner := bufio.NewScanner(os.Stdin)
 	state := 0
 	current_board := (*board)(nil)
-	for scanner.Scan() {
-		line := scanner.Text()
-
+	for _, line := range helpers.ReadStdin() {
 		switch state {
 		case 0:
 			for _, v := range strings.Split(line, ",") {
@@ -74,8 +70,10 @@ func main() {
 				panic(fmt.Errorf("bad line (expected empty line): <%s>", line))
 			}
 			state++
-		case 2:
-			current_board = createBoard()
+		default:
+			if state == 2 {
+				current_board = createBoard()
+			}
 			match := re.FindStringSubmatch(line)
 			if match == nil {
 				panic(fmt.Errorf("bad line: <%s>", line))
@@ -83,48 +81,13 @@ func main() {
 			for i := 0; i < 5; i++ {
 				current_board.setValue(state-2, i, helpers.MustParseInt(match[1+i]))
 			}
-			state++
-		case 3:
-			match := re.FindStringSubmatch(line)
-			if match == nil {
-				panic(fmt.Errorf("bad line: <%s>", line))
+			if state == 6 {
+				boards = append(boards, current_board)
+				state = 1
+			} else {
+				state++
 			}
-			for i := 0; i < 5; i++ {
-				current_board.setValue(state-2, i, helpers.MustParseInt(match[i+1]))
-			}
-			state++
-		case 4:
-			match := re.FindStringSubmatch(line)
-			if match == nil {
-				panic(fmt.Errorf("bad line: <%s>", line))
-			}
-			for i := 0; i < 5; i++ {
-				current_board.setValue(state-2, i, helpers.MustParseInt(match[i+1]))
-			}
-			state++
-		case 5:
-			match := re.FindStringSubmatch(line)
-			if match == nil {
-				panic(fmt.Errorf("bad line: <%s>", line))
-			}
-			for i := 0; i < 5; i++ {
-				current_board.setValue(state-2, i, helpers.MustParseInt(match[i+1]))
-			}
-			state++
-		case 6:
-			match := re.FindStringSubmatch(line)
-			if match == nil {
-				panic(fmt.Errorf("bad line: <%s>", line))
-			}
-			for i := 0; i < 5; i++ {
-				current_board.setValue(state-2, i, helpers.MustParseInt(match[i+1]))
-			}
-			boards = append(boards, current_board)
-			state = 1
 		}
-	}
-	if err := scanner.Err(); err != nil {
-		panic(err)
 	}
 
 	numbers_set := make(map[int]bool)

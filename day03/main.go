@@ -1,25 +1,21 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
+
 	"github.com/flopp/aoc2021/helpers"
-	"os"
 )
 
 func main() {
 	diagnostic_report := make([][]bool, 0)
 	line_length := -1
-	scanner := bufio.NewScanner(os.Stdin)
-	for scanner.Scan() {
-		line := scanner.Text()
-
+	for _, line := range helpers.ReadStdin() {
 		report_line := make([]bool, 0)
 		for _, bit := range line {
-			switch {
-			case bit == '1':
+			switch bit {
+			case '1':
 				report_line = append(report_line, true)
-			case bit == '0':
+			case '0':
 				report_line = append(report_line, false)
 			default:
 				panic(fmt.Errorf("bad line: <%s>", line))
@@ -35,9 +31,6 @@ func main() {
 		}
 		diagnostic_report = append(diagnostic_report, report_line)
 	}
-	if err := scanner.Err(); err != nil {
-		panic(err)
-	}
 
 	if helpers.Part1() {
 		count1 := make([]int, len(diagnostic_report[0]))
@@ -48,9 +41,6 @@ func main() {
 					count1[index]++
 				}
 			}
-		}
-		if err := scanner.Err(); err != nil {
-			panic(err)
 		}
 
 		gamma_rate := 0
