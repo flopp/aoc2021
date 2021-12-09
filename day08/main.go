@@ -59,8 +59,6 @@ func computePermutations(numbers []string) [][]string {
 }
 
 func main() {
-	part1 := helpers.Part1()
-
 	re_pattern := regexp.MustCompile(`\b([a-g]+)\b`)
 	patterns_list := make([][]string, 0)
 	for _, line := range helpers.ReadStdin() {
@@ -75,7 +73,7 @@ func main() {
 		patterns_list = append(patterns_list, patterns)
 	}
 
-	if part1 {
+	if helpers.Part1() {
 		re1478 := regexp.MustCompile(`^([a-g]{2}|[a-g]{3}|[a-g]{4}|[a-g]{7})$`)
 		count1478 := 0
 		for _, patterns := range patterns_list {
