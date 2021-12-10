@@ -30,41 +30,44 @@ func (s *stack) Push(v rune) {
 	s.top++
 }
 
-func (s *stack) Pop() (bool, rune) {
+func (s *stack) Pop() rune {
 	if s.top == -1 {
-		return false, rune(0)
+		panic("cannot pop from empty stack")
 	}
 	s.top--
-	return true, s.data[s.top+1]
+	return s.data[s.top+1]
+}
+
+var open_brace_map map[rune]rune = map[rune]rune{
+	')': '(',
+	']': '[',
+	'}': '{',
+	'>': '<',
+}
+
+var corruption_score_map map[rune]int = map[rune]int{
+	')': 3,
+	']': 57,
+	'}': 1197,
+	'>': 25137,
+}
+
+var completion_score_map map[rune]int = map[rune]int{
+	'(': 1,
+	'[': 2,
+	'{': 3,
+	'<': 4,
 }
 
 func is_corrupted_or_incomplete(line string) (int, int) {
 	s := CreateStack()
 	for _, c := range line {
-		switch c {
-		case '(':
+		switch {
+		case c == '(' || c == '[' || c == '{' || c == '<':
 			s.Push(c)
-		case '[':
-			s.Push(c)
-		case '{':
-			s.Push(c)
-		case '<':
-			s.Push(c)
-		case ')':
-			if ok, r := s.Pop(); !ok || r != '(' {
-				return 3, 0
-			}
-		case ']':
-			if ok, r := s.Pop(); !ok || r != '[' {
-				return 57, 0
-			}
-		case '}':
-			if ok, r := s.Pop(); !ok || r != '{' {
-				return 1197, 0
-			}
-		case '>':
-			if ok, r := s.Pop(); !ok || r != '<' {
-				return 25137, 0
+		case c == ')' || c == ']' || c == '}' || c == '>':
+			if s.Pop() != open_brace_map[c] {
+				return corruption_score_map[c], 0
 			}
 		default:
 			panic(fmt.Errorf("bad character '%s' in line '%s'", string(c), line))
@@ -73,17 +76,8 @@ func is_corrupted_or_incomplete(line string) (int, int) {
 
 	completion_score := 0
 	for !s.IsEmpty() {
-		_, c := s.Pop()
-		switch c {
-		case '(':
-			completion_score = 5*completion_score + 1
-		case '[':
-			completion_score = 5*completion_score + 2
-		case '{':
-			completion_score = 5*completion_score + 3
-		case '<':
-			completion_score = 5*completion_score + 4
-		}
+		c := s.Pop()
+		completion_score = 5*completion_score + completion_score_map[c]
 	}
 	return 0, completion_score
 }
