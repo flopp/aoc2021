@@ -20,6 +20,8 @@ format:
 	go fmt day07/main.go
 	go fmt day08/main.go
 	go fmt day09/main.go
+	go fmt day10/main.go
+	go fmt day11/main.go
 
 .PHONY: 01
 01:
@@ -89,4 +91,11 @@ format:
 	@echo "expected: 26397"
 	$(run1)
 	@echo "expected: 288957"
+	$(run2)
+
+.PHONY: 11
+11:
+	@echo "expected: 1656"
+	$(run1)
+	@echo "expected: 195"
 	$(run2)
