@@ -15,10 +15,10 @@ func main() {
 	depth := 0
 	re := regexp.MustCompile(`^(forward|down|up) (\d+)$`)
 
-	for _, line := range helpers.ReadStdin() {
+	helpers.ReadStdin(func(line string) {
 		match := re.FindStringSubmatch(line)
 		if match == nil {
-			panic(fmt.Errorf("bad line: <%s>", line))
+			panic("bad input")
 		}
 
 		value := helpers.MustParseInt(match[2])
@@ -42,7 +42,7 @@ func main() {
 				aim += value
 			}
 		}
-	}
+	})
 
-	fmt.Printf("%d\n", horizontal_position*depth)
+	fmt.Println(horizontal_position * depth)
 }

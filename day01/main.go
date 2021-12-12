@@ -15,9 +15,9 @@ func main() {
 	}
 
 	depths := make([]int, 0)
-	for _, line := range helpers.ReadStdin() {
+	helpers.ReadStdin(func(line string) {
 		depths = append(depths, helpers.MustParseInt(line))
-	}
+	})
 
 	deeper := 0
 	last_window := 0
@@ -36,5 +36,5 @@ func main() {
 		}
 	}
 
-	fmt.Printf("%d\n", deeper)
+	fmt.Println(deeper)
 }

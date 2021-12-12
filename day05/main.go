@@ -75,7 +75,7 @@ func main() {
 	board := make(map[xy]int)
 
 	re := regexp.MustCompile(`^(\d+),(\d+)\s*->\s*(\d+),(\d+)$`)
-	for _, line := range helpers.ReadStdin() {
+	helpers.ReadStdin(func(line string) {
 		match := re.FindStringSubmatch(line)
 		x1 := helpers.MustParseInt(match[1])
 		y1 := helpers.MustParseInt(match[2])
@@ -89,7 +89,7 @@ func main() {
 		} else {
 			insertLine(&board, x1, y1, x2, y2)
 		}
-	}
+	})
 
-	fmt.Printf("%d\n", countCrossings(&board))
+	fmt.Println(countCrossings(&board))
 }

@@ -11,11 +11,11 @@ func main() {
 	part1 := helpers.Part1()
 
 	crabs := make([]int, 0)
-	for _, line := range helpers.ReadStdin() {
+	helpers.ReadStdin(func(line string) {
 		for _, crab_s := range strings.Split(line, ",") {
 			crabs = append(crabs, helpers.MustParseInt(crab_s))
 		}
-	}
+	})
 
 	min := crabs[0]
 	max := min
@@ -40,5 +40,5 @@ func main() {
 		}
 	}
 
-	fmt.Printf("%d\n", minFuel)
+	fmt.Println(minFuel)
 }

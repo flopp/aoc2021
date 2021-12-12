@@ -5,7 +5,7 @@ import (
 )
 
 func MustParseInt(s string) int {
-	x, err := strconv.ParseInt(s, 10, 32)
+	x, err := strconv.Atoi(s)
 	if err != nil {
 		panic(err)
 	}

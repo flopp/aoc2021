@@ -43,23 +43,19 @@ func Step(energyLevels []int) int {
 	}
 
 	// step 2: flash
-	again := true
-	for again {
+	for again := true; again; /**/ {
 		again = false
 		for i := range energyLevels {
-			if energyLevels[i] <= 9 {
-				continue
-			}
+			if energyLevels[i] > 9 {
+				flashes++
+				energyLevels[i] = 0
 
-			flashes++
-			energyLevels[i] = 0
-
-			xy := FromIndex(i)
-			for _, a := range xy.Adjacent() {
-				j := a.Index()
-				if energyLevels[j] != 0 {
-					again = true
-					energyLevels[j]++
+				for _, xy := range FromIndex(i).Adjacent() {
+					j := xy.Index()
+					if energyLevels[j] != 0 {
+						again = true
+						energyLevels[j]++
+					}
 				}
 			}
 		}
@@ -70,13 +66,13 @@ func Step(energyLevels []int) int {
 
 func main() {
 	energyLevels := make([]int, 0, 100)
-	for _, line := range helpers.ReadStdin() {
+	helpers.ReadStdin(func(line string) {
 		for _, c := range line {
 			energyLevels = append(energyLevels, helpers.MustParseInt(string(c)))
 		}
-	}
+	})
 	if len(energyLevels) != 100 {
-		panic("bad input size")
+		panic("bad input")
 	}
 
 	if helpers.Part1() {
@@ -84,11 +80,11 @@ func main() {
 		for loop := 1; loop <= 100; loop++ {
 			flashes += Step(energyLevels)
 		}
-		fmt.Printf("%d\n", flashes)
+		fmt.Println(flashes)
 	} else {
 		for loop := 1; true; loop++ {
 			if Step(energyLevels) == 100 {
-				fmt.Printf("%d\n", loop)
+				fmt.Println(loop)
 				break
 			}
 		}

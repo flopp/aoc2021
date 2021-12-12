@@ -71,19 +71,19 @@ func main() {
 	size_y := 0
 	data := make([]int, 0)
 
-	for _, line := range helpers.ReadStdin() {
+	helpers.ReadStdin(func(line string) {
 		if size_y == 0 {
 			size_x = len(line)
 		}
 		size_y++
 		if len(line) != size_x {
-			panic(fmt.Errorf("bad line length (%d, expected %d): %s", len(line), size_x, line))
+			panic("bad input")
 		}
 
 		for _, c := range line {
 			data = append(data, helpers.MustParseInt(string(c)))
 		}
-	}
+	})
 	height_map := CreateHeightMap(size_x, size_y, data)
 
 	if helpers.Part1() {
@@ -106,7 +106,7 @@ func main() {
 			}
 		}
 
-		fmt.Printf("%d\n", risk_level_sum)
+		fmt.Println(risk_level_sum)
 	} else {
 		basin := 10
 		basin_sizes := make([]int, 0)
@@ -128,6 +128,6 @@ func main() {
 			mult *= basin_size
 		}
 
-		fmt.Printf("%d\n", mult)
+		fmt.Println(mult)
 	}
 }

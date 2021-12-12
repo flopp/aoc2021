@@ -61,17 +61,17 @@ func computePermutations(numbers []string) [][]string {
 func main() {
 	re_pattern := regexp.MustCompile(`\b([a-g]+)\b`)
 	patterns_list := make([][]string, 0)
-	for _, line := range helpers.ReadStdin() {
+	helpers.ReadStdin(func(line string) {
 		matches := re_pattern.FindAllStringSubmatch(line, -1)
 		if matches == nil {
-			panic(fmt.Errorf("bad line: %s", line))
+			panic("bad input")
 		}
 		patterns := make([]string, 0, len(matches))
 		for _, v := range matches {
 			patterns = append(patterns, helpers.SortString(v[1]))
 		}
 		patterns_list = append(patterns_list, patterns)
-	}
+	})
 
 	if helpers.Part1() {
 		re1478 := regexp.MustCompile(`^([a-g]{2}|[a-g]{3}|[a-g]{4}|[a-g]{7})$`)
@@ -84,7 +84,7 @@ func main() {
 			}
 		}
 
-		fmt.Printf("%d\n", count1478)
+		fmt.Println(count1478)
 	} else {
 		numbers := make([]string, 0, 10)
 		numbers = append(numbers, "abcefg")
@@ -132,10 +132,10 @@ func main() {
 				}
 			}
 			if !ok {
-				panic(fmt.Errorf("no permutation found"))
+				panic("no permutation found")
 			}
 		}
 
-		fmt.Printf("%d\n", sum)
+		fmt.Println(sum)
 	}
 }

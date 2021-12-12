@@ -58,7 +58,7 @@ func main() {
 	numbers := make([]int, 0)
 	state := 0
 	current_board := (*board)(nil)
-	for _, line := range helpers.ReadStdin() {
+	helpers.ReadStdin(func(line string) {
 		switch state {
 		case 0:
 			for _, v := range strings.Split(line, ",") {
@@ -67,7 +67,7 @@ func main() {
 			state++
 		case 1:
 			if len(line) != 0 {
-				panic(fmt.Errorf("bad line (expected empty line): <%s>", line))
+				panic("bad input")
 			}
 			state++
 		default:
@@ -76,7 +76,7 @@ func main() {
 			}
 			match := re.FindStringSubmatch(line)
 			if match == nil {
-				panic(fmt.Errorf("bad line: <%s>", line))
+				panic("bad input")
 			}
 			for i := 0; i < 5; i++ {
 				current_board.setValue(state-2, i, helpers.MustParseInt(match[1+i]))
@@ -88,7 +88,7 @@ func main() {
 				state++
 			}
 		}
-	}
+	})
 
 	numbers_set := make(map[int]bool)
 	if helpers.Part1() {
@@ -96,7 +96,7 @@ func main() {
 			numbers_set[number] = true
 			for _, b := range boards {
 				if b.win(numbers_set) {
-					fmt.Printf("%d\n", number*b.score(numbers_set))
+					fmt.Println(number * b.score(numbers_set))
 					return
 				}
 			}
@@ -116,6 +116,6 @@ func main() {
 				}
 			}
 		}
-		fmt.Printf("%d\n", last_score)
+		fmt.Println(last_score)
 	}
 }

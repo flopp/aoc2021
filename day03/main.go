@@ -9,7 +9,7 @@ import (
 func main() {
 	diagnostic_report := make([][]bool, 0)
 	line_length := -1
-	for _, line := range helpers.ReadStdin() {
+	helpers.ReadStdin(func(line string) {
 		report_line := make([]bool, 0)
 		for _, bit := range line {
 			switch bit {
@@ -18,7 +18,7 @@ func main() {
 			case '0':
 				report_line = append(report_line, false)
 			default:
-				panic(fmt.Errorf("bad line: <%s>", line))
+				panic("bad input")
 			}
 		}
 
@@ -26,11 +26,11 @@ func main() {
 			line_length = len(report_line)
 		} else {
 			if len(report_line) != line_length {
-				panic(fmt.Errorf("bad line: <%s>", line))
+				panic("bad input")
 			}
 		}
 		diagnostic_report = append(diagnostic_report, report_line)
-	}
+	})
 
 	if helpers.Part1() {
 		count1 := make([]int, len(diagnostic_report[0]))
@@ -59,7 +59,7 @@ func main() {
 
 		power_consumption := gamma_rate * epsilon_rate
 
-		fmt.Printf("%d\n", power_consumption)
+		fmt.Println(power_consumption)
 	} else {
 		// oxygen generator rating
 		filtered_diagnostic_report := append([][]bool{}, diagnostic_report...)
@@ -142,6 +142,6 @@ func main() {
 		}
 
 		life_support_rating := oxygen_generator_rating * co2_scrubber_rating
-		fmt.Printf("%d\n", life_support_rating)
+		fmt.Println(life_support_rating)
 	}
 }

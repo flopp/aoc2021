@@ -70,7 +70,7 @@ func is_corrupted_or_incomplete(line string) (int, int) {
 				return corruption_score_map[c], 0
 			}
 		default:
-			panic(fmt.Errorf("bad character '%s' in line '%s'", string(c), line))
+			panic("bad input")
 		}
 	}
 
@@ -85,21 +85,19 @@ func is_corrupted_or_incomplete(line string) (int, int) {
 func main() {
 	total_syntax_error_score := 0
 	completion_scores := make([]int, 0)
-	for _, line := range helpers.ReadStdin() {
+	helpers.ReadStdin(func(line string) {
 		corruption_score, completion_score := is_corrupted_or_incomplete(line)
 		if corruption_score != 0 {
 			total_syntax_error_score += corruption_score
 		} else if completion_score != 0 {
 			completion_scores = append(completion_scores, completion_score)
-		} else {
-			panic(fmt.Errorf("line is valid: %s", line))
 		}
-	}
+	})
 	if helpers.Part1() {
-		fmt.Printf("%d\n", total_syntax_error_score)
+		fmt.Println(total_syntax_error_score)
 	} else {
 		sort.Ints((completion_scores))
 		middle_score := completion_scores[len(completion_scores)/2]
-		fmt.Printf("%d\n", middle_score)
+		fmt.Println(middle_score)
 	}
 }

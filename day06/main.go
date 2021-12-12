@@ -25,12 +25,12 @@ func main() {
 	}
 
 	timers := make(map[int]int)
-	for _, line := range helpers.ReadStdin() {
+	helpers.ReadStdin(func(line string) {
 		for _, timer_s := range strings.Split(line, ",") {
 			timer := helpers.MustParseInt(timer_s)
 			insert(&timers, timer, 1)
 		}
-	}
+	})
 
 	for day := 0; day < days; day++ {
 		new_timers := make(map[int]int)
@@ -49,5 +49,5 @@ func main() {
 	for _, count := range timers {
 		total += count
 	}
-	fmt.Printf("%d\n", total)
+	fmt.Println(total)
 }
