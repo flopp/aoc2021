@@ -1,14 +1,19 @@
 define run1
 	@go run day$@/main.go part1 < day$@/test.txt
-	@echo "part 1 =>"
+	@echo "=>"
 	@go run day$@/main.go part1 < day$@/puzzle.txt
+	@echo
 endef
 
 define run2
 	@go run day$@/main.go part2 < day$@/test.txt
-	@echo "part 2 =>"
+	@echo "=>"
 	@go run day$@/main.go part2 < day$@/puzzle.txt
+	@echo
 endef
+
+.PHONY: all
+all: 01 02 03 04 05 06 07 08 09 10 11 12 13
 
 .PHONY: format
 format:
@@ -112,20 +117,22 @@ format:
 	@go run day$@/main.go part1 < day$@/test2.txt
 	@echo "expected: 226"
 	@go run day$@/main.go part1 < day$@/test3.txt
-	@echo "part 1 =>"
+	@echo "=>"
 	@go run day$@/main.go part1 < day$@/puzzle.txt
+	@echo
 	@echo "expected: 36"
 	@go run day$@/main.go part2 < day$@/test1.txt
 	@echo "expected: 103"
 	@go run day$@/main.go part2 < day$@/test2.txt
 	@echo "expected: 3509"
 	@go run day$@/main.go part2 < day$@/test3.txt
-	@echo "part 2 =>"
+	@echo "=>"
 	@go run day$@/main.go part2 < day$@/puzzle.txt
+	@echo
 
 .PHONY: 13
 13:
-	@echo "expected: ?"
+	@echo "expected: 17"
 	$(run1)
-	@echo "expected: ?"
+	@echo "expected: 0"
 	$(run2)

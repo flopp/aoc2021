@@ -3,9 +3,17 @@ package main
 import (
 	"fmt"
 	"regexp"
+	"sort"
+	"strings"
 
 	"github.com/flopp/aoc2021/helpers"
 )
+
+func sortString(s string) string {
+	a := strings.Split(s, "")
+	sort.Strings(a)
+	return strings.Join(a, "")
+}
 
 func permutateArray(arr []int) [][]int {
 	var helper func([]int, int)
@@ -50,7 +58,7 @@ func computePermutations(numbers []string) [][]string {
 				i := int(c - 'a')
 				permuted_number += string(rune(int('a') + p[i]))
 			}
-			permuted_numbers = append(permuted_numbers, helpers.SortString(permuted_number))
+			permuted_numbers = append(permuted_numbers, sortString(permuted_number))
 		}
 		permutations = append(permutations, permuted_numbers)
 	}
@@ -68,7 +76,7 @@ func main() {
 		}
 		patterns := make([]string, 0, len(matches))
 		for _, v := range matches {
-			patterns = append(patterns, helpers.SortString(v[1]))
+			patterns = append(patterns, sortString(v[1]))
 		}
 		patterns_list = append(patterns_list, patterns)
 	})

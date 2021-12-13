@@ -15,30 +15,26 @@ type XY struct {
 func print(coordinates []XY) {
 	max_x := 0
 	max_y := 0
+	cells := make(map[XY]bool)
 	for _, xy := range coordinates {
-		if xy.x < 0 || xy.y < 0 {
-			panic(xy)
+		if xy.x > max_x {
+			max_x = xy.x
 		}
-		max_x = helpers.Max(max_x, xy.x)
-		max_y = helpers.Max(max_y, xy.y)
-	}
-	max_x++
-	max_y++
-
-	grid := make([]bool, max_x*max_y)
-	for _, xy := range coordinates {
-		grid[xy.x+xy.y*max_x] = true
+		if xy.y > max_y {
+			max_y = xy.y
+		}
+		cells[xy] = true
 	}
 
-	for i, b := range grid {
-		if !b {
-			fmt.Printf(".")
-		} else {
-			fmt.Printf("#")
+	for y := 0; y <= max_y; y++ {
+		for x := 0; x <= max_x; x++ {
+			if cells[XY{x, y}] {
+				fmt.Printf("█")
+			} else {
+				fmt.Printf("·")
+			}
 		}
-		if i%max_x == max_x-1 {
-			fmt.Println()
-		}
+		fmt.Println()
 	}
 }
 
@@ -98,5 +94,4 @@ func main() {
 		}
 		print(coordinates)
 	}
-
 }

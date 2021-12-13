@@ -20,15 +20,22 @@ func main() {
 	min := crabs[0]
 	max := min
 	for _, crab := range crabs {
-		min = helpers.Min(min, crab)
-		max = helpers.Max(max, crab)
+		if crab < min {
+			min = crab
+		}
+		if crab > max {
+			max = crab
+		}
 	}
 
 	minFuel := -1
 	for pos := min; pos <= max; pos++ {
 		fuel := 0
 		for _, crab := range crabs {
-			distance := helpers.Abs(crab - pos)
+			distance := crab - pos
+			if distance < 0 {
+				distance = -distance
+			}
 			if part1 {
 				fuel += distance
 			} else {
