@@ -25,6 +25,7 @@ format:
 	go fmt day10/main.go
 	go fmt day11/main.go
 	go fmt day12/main.go
+	go fmt day13/main.go
 
 .PHONY: 01
 01:
@@ -121,3 +122,10 @@ format:
 	@go run day$@/main.go part2 < day$@/test3.txt
 	@echo "part 2 =>"
 	@go run day$@/main.go part2 < day$@/puzzle.txt
+
+.PHONY: 13
+13:
+	@echo "expected: ?"
+	$(run1)
+	@echo "expected: ?"
+	$(run2)
