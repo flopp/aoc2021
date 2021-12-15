@@ -1,6 +1,7 @@
 package main
 
 import (
+	"container/heap"
 	"fmt"
 	"math"
 
@@ -8,39 +9,26 @@ import (
 )
 
 type Grid struct {
-	Width  int
-	Height int
-	data   []int
-}
-
-func (grid *Grid) appendRow(row []int) {
-	if grid.Width == 0 {
-		grid.Width = len(row)
-	} else if grid.Width != len(row) {
-		panic("bad input")
-	}
-	grid.Height++
-	for _, cell := range row {
-		grid.data = append(grid.data, cell)
-	}
-}
-
-func (grid *Grid) Pos(x int, y int) int {
-	return x + y*grid.Width
+	width   int
+	height  int
+	data    []int
+	visited []bool
 }
 
 func (grid *Grid) Multiply(factor int) Grid {
-	grid2 := Grid{factor * grid.Width, factor * grid.Height, make([]int, factor*factor*grid.Width*grid.Height)}
+	w2 := factor * grid.width
+	h2 := factor * grid.height
+	grid2 := Grid{w2, h2, make([]int, w2*h2), make([]bool, w2*h2)}
 	for i, v := range grid.data {
-		x := i % grid.Width
-		y := i / grid.Width
+		x := i % grid.width
+		y := i / grid.width
 		for xx := 0; xx < factor; xx++ {
 			for yy := 0; yy < factor; yy++ {
 				c := v + xx + yy
 				for c > 9 {
 					c -= 9
 				}
-				grid2.data[grid2.Pos(grid.Width*xx+x, grid.Height*yy+y)] = c
+				grid2.data[grid.width*xx+x+w2*(grid.height*yy+y)] = c
 			}
 		}
 	}
@@ -48,74 +36,111 @@ func (grid *Grid) Multiply(factor int) Grid {
 }
 
 type PosCost struct {
-	Pos  int
-	Cost int
+	pos  int
+	cost int
 }
 
 func (grid *Grid) next(pos int) []PosCost {
 	result := make([]PosCost, 0, 4)
-	x := pos % grid.Width
-	y := pos / grid.Width
-	if x > 0 {
+	x := pos % grid.width
+	y := pos / grid.width
+	if x > 0 && !grid.visited[pos-1] {
 		result = append(result, PosCost{pos - 1, grid.data[pos-1]})
 	}
-	if x+1 < grid.Width {
+	if x+1 < grid.width && !grid.visited[pos+1] {
 		result = append(result, PosCost{pos + 1, grid.data[pos+1]})
 	}
-	if y > 0 {
-		result = append(result, PosCost{pos - grid.Width, grid.data[pos-grid.Width]})
+	if y > 0 && !grid.visited[pos-grid.width] {
+		result = append(result, PosCost{pos - grid.width, grid.data[pos-grid.width]})
 	}
-	if y+1 < grid.Height {
-		result = append(result, PosCost{pos + grid.Width, grid.data[pos+grid.Width]})
+	if y+1 < grid.height && !grid.visited[pos+grid.width] {
+		result = append(result, PosCost{pos + grid.width, grid.data[pos+grid.width]})
 	}
 	return result
+}
+
+type PQItem struct {
+	pos   int
+	cost  int
+	index int
+}
+type PQ []*PQItem
+
+func (pq PQ) Len() int {
+	return len(pq)
+}
+
+func (pq PQ) Less(i, j int) bool {
+	return pq[i].cost < pq[j].cost
+}
+
+func (pq PQ) Swap(i, j int) {
+	pq[i], pq[j] = pq[j], pq[i]
+	pq[i].index = i
+	pq[j].index = j
+}
+
+func (pq *PQ) Push(x interface{}) {
+	n := len(*pq)
+	item := x.(*PQItem)
+	item.index = n
+	*pq = append(*pq, item)
+}
+
+func (pq *PQ) Pop() interface{} {
+	old := *pq
+	n := len(old)
+	item := old[n-1]
+	old[n-1] = nil
+	*pq = old[0 : n-1]
+	return item
 }
 
 func main() {
 	grid := Grid{}
 	helpers.ReadStdin(func(line string) {
-		row := make([]int, 0, len(line))
-		for _, c := range line {
-			row = append(row, helpers.MustParseInt(string(c)))
+		if grid.width == 0 {
+			grid.width = len(line)
 		}
-		grid.appendRow(row)
+		grid.height++
+		for _, c := range line {
+			grid.data = append(grid.data, helpers.MustParseInt(string(c)))
+		}
 	})
+	grid.visited = make([]bool, len(grid.data))
 
 	if !helpers.Part1() {
 		grid = grid.Multiply(5)
 	}
 
-	start := grid.Pos(0, 0)
-	target := grid.Pos(grid.Width-1, grid.Height-1)
-	visited := make([]bool, grid.Width*grid.Height)
-
-	cost := make([]int, grid.Width*grid.Height)
-	for i := range cost {
-		cost[i] = math.MaxInt32
+	costItems := make(map[int]*PQItem)
+	costPQ := make(PQ, grid.width*grid.height)
+	for i := range costPQ {
+		item := PQItem{i, math.MaxInt32, i}
+		costPQ[i] = &item
+		costItems[i] = &item
 	}
-	cost[start] = 0
+	// cost of start position is 0
+	costPQ[0].cost = 0
+	heap.Init(&costPQ)
 
-	found := false
-	for !found {
-		minCost := math.MaxInt32
-		minPos := -1
-		for i, c := range cost {
-			if !visited[i] && c < minCost {
-				minCost = c
-				minPos = i
-			}
-		}
-		visited[minPos] = true
-		if minPos == target {
+	for found := false; !found; /**/ {
+		minItem := heap.Pop(&costPQ).(*PQItem)
+		grid.visited[minItem.pos] = true
+		// we've reached the target
+		if minItem.pos == len(grid.data)-1 {
 			found = true
 			break
 		}
-		for _, next := range grid.next(minPos) {
-			if !visited[next.Pos] && cost[next.Pos] > next.Cost+minCost {
-				cost[next.Pos] = next.Cost + minCost
+		for _, next := range grid.next(minItem.pos) {
+			nextItem := costItems[next.pos]
+			if next.cost+minItem.cost >= nextItem.cost {
+				continue
 			}
+			nextItem.cost = next.cost + minItem.cost
+			heap.Fix(&costPQ, nextItem.index)
 		}
 	}
 
-	fmt.Println(cost[target])
+	fmt.Println(costItems[len(grid.data)-1].cost)
 }
