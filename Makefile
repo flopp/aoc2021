@@ -13,7 +13,7 @@ define run2
 endef
 
 .PHONY: all
-all: 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15
+all: 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16
 
 .PHONY: format
 format:
@@ -33,6 +33,7 @@ format:
 	go fmt day13/main.go
 	go fmt day14/main.go
 	go fmt day15/main.go
+	go fmt day16/main.go
 
 .PHONY: 01
 01:
@@ -152,3 +153,26 @@ format:
 	$(run1)
 	@echo "expected: 315"
 	$(run2)
+
+.PHONY: 16
+16:
+	@echo "expected: 16 23 31"
+	@go run day$@/main.go part1 < day$@/test1a.txt
+	@go run day$@/main.go part1 < day$@/test1b.txt
+	@go run day$@/main.go part1 < day$@/test1c.txt
+	@go run day$@/main.go part1 < day$@/test1d.txt
+	@echo "=>"
+	@go run day$@/main.go part1 < day$@/puzzle.txt
+	@echo
+	@echo "expected: 3 54 7 9 1 0 0 1"
+	@go run day$@/main.go part2 < day$@/test2a.txt
+	@go run day$@/main.go part2 < day$@/test2b.txt
+	@go run day$@/main.go part2 < day$@/test2c.txt
+	@go run day$@/main.go part2 < day$@/test2d.txt
+	@go run day$@/main.go part2 < day$@/test2e.txt
+	@go run day$@/main.go part2 < day$@/test2f.txt
+	@go run day$@/main.go part2 < day$@/test2g.txt
+	@go run day$@/main.go part2 < day$@/test2h.txt
+	@echo "=>"
+	@go run day$@/main.go part2 < day$@/puzzle.txt
+	@echo
