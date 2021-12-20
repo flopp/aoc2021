@@ -13,7 +13,7 @@ define run2
 endef
 
 .PHONY: all
-all: 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18
+all: 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20
 
 .PHONY: format
 format:
@@ -36,6 +36,8 @@ format:
 	go fmt day16/main.go
 	go fmt day17/main.go
 	go fmt day18/main.go
+	go fmt day19/main.go
+	go fmt day20/main.go
 
 .PHONY: 01
 01:
@@ -191,4 +193,18 @@ format:
 	@echo "expected: 4140"
 	$(run1)
 	@echo "expected: 3993"
+	$(run2)
+
+.PHONY: 19
+19:
+	@echo "expected: 79"
+	$(run1)
+	@echo "expected: ?"
+	$(run2)
+
+.PHONY: 20
+20:
+	@echo "expected: 35"
+	$(run1)
+	@echo "expected: 3351"
 	$(run2)
