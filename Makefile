@@ -215,3 +215,12 @@ format:
 	$(run1)
 	@echo "expected: 444356092776315"
 	$(run2)
+
+.PHONY: 22
+22:
+	@echo "expected: 590784"
+	$(run1)
+	@echo "expected: 2758514936282235"
+	@go run day$@/main.go part2 < day$@/test2.txt
+	@echo "=>"
+	@go run day$@/main.go part2 < day$@/puzzle.txt
