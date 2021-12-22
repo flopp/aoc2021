@@ -213,5 +213,5 @@ format:
 21:
 	@echo "expected: 739785"
 	$(run1)
-	@echo "expected: ?"
+	@echo "expected: 444356092776315"
 	$(run2)
