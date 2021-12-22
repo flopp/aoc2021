@@ -208,3 +208,10 @@ format:
 	$(run1)
 	@echo "expected: 3351"
 	$(run2)
+
+.PHONY: 21
+21:
+	@echo "expected: 739785"
+	$(run1)
+	@echo "expected: ?"
+	$(run2)
